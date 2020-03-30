@@ -63,7 +63,7 @@ p{
   height: 40px;
   width: auto;
 }
-.log-panel-buttons button:first-of-type{
+.log-panel-data-button{
   padding: 5px;
   border: none;
   background-color: lightsalmon;
@@ -75,11 +75,23 @@ p{
   outline: none;
   cursor: pointer;
 }
-.log-panel-buttons button:nth-of-type(2){
+.log-panel-compile-button{
   padding: 5px;
   border: none;
   background-color: rgb(18, 182, 182);
   border-bottom: solid 4px teal;
+  color: white;
+  padding: 5px 10px;
+  margin: 0 10px;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+.log-panel-test-button{
+  padding: 5px;
+  border: none;
+  background-color: salmon;
+  border-bottom: solid 4px rgb(190, 97, 86);
   color: white;
   padding: 5px 10px;
   margin: 0 10px;

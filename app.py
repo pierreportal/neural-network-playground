@@ -7,10 +7,16 @@ app = Flask(__name__)
 @app.route('/model', methods=["POST", "GET"])
 def model():
     if request.method == 'POST':
-        processing.receive_data(request.data)
-        return 'True'
+        result = processing.receive_data(request.data)
+
+        summary_object = {
+            "acc": str(result.history["accuracy"]),
+            "loss": str(result.history["loss"])
+        }
+
+        return str(summary_object)
     else:
-        return "Hello!"
+        return 'hello'
 
 
 if __name__ == "__main__":

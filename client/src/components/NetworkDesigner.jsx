@@ -2,12 +2,17 @@ import React, { useState, useEffect } from 'react'
 import Layer from './network-designer/Layer'
 
 export default function NetworkDesigner(props) {
-    const inputLayer = { dim: [props.nFeatures, 1], activation: null, type: 'input' }
+    const inputLayer = { dim: [props.nFeatures, 1], activation: props.nFeatures > 1 ? 'relu' : null, type: 'input' }
     const outpuLayer = { dim: [props.nOutput, 1], activation: null, type: 'output' }
 
     const [state, setState] = useState({
         nOutput: props.nOutput,
         nFeatures: props.nFeatures,
+        epochs: 200,
+        optimizer: 'rmsprop',
+        learningRate: '1e-3',
+        lossFunction: 'binary-crossentropy',
+        batch_size: 164,
         layers: [
             inputLayer,
             outpuLayer
@@ -18,7 +23,7 @@ export default function NetworkDesigner(props) {
         const W = state.layers.slice(0, state.layers.length - 1).map((layer, i) => layer.dim[0] * state.layers[i + 1].dim[0]).reduce((a, b) => a + b)
         const b = state.layers.slice(1, state.layers.length).map(layer => layer.dim[0]).reduce((a, b) => a + b)
         const nParams = W + b
-        return { weights: W, bias: b, nParams: nParams, layers: state.layers }
+        return { weights: W, bias: b, nParams: nParams, layers: state.layers, batch_size: state.batch_size, optimizer: state.optimizer, lossFunction: state.lossFunction, learningRate: state.learningRate, epochs: state.epochs }
     }
     useEffect(() => {
         props.getNParameters(nParameters())
@@ -26,10 +31,12 @@ export default function NetworkDesigner(props) {
 
 
     useEffect(() => {
-        const inputLayer = { dim: [props.nFeatures, 1], activation: null, type: 'input' }
+        const inputLayer = { dim: [props.nFeatures, 1], activation: props.nFeatures > 1 ? 'relu' : null, type: 'input' }
         const outpuLayer = { dim: [props.nOutput <= 2 ? 1 : props.nOutput, 1], activation: props.nFeatures === 1 ? null : props.nOutput <= 2 ? 'sigmoid' : 'softmax', type: 'output' }
         setState({
-            layers: [inputLayer, ...state.layers.slice(1, state.layers.length - 1).map(l => ({ ...l, activation: props.nFeatures === 1 ? null : 'relu' })), outpuLayer]
+            ...state,
+            layers: [inputLayer, ...state.layers.slice(1, state.layers.length - 1).map(l => ({ ...l, activation: props.nFeatures === 1 ? null : 'relu' })), outpuLayer],
+            lossFunction: props.nOutput >= 3 ? 'categorical-crossentropy' : 'binary-crossentropy',
         })
     }, [props.nFeatures, props.nOutput])
 
@@ -38,10 +45,10 @@ export default function NetworkDesigner(props) {
         setState({ ...state, layers: [...state.layers].map((l, i) => i === layerIndex ? { ...l, activation: input } : l) })
     }
     const addNeuron = layerIndex => {
-        setState({ ...state, layers: [...state.layers].map((l, i) => i === layerIndex ? { ...l, dim: [l.dim[0] + 1, l.dim[1]] } : l) })
+        setState({ ...state, layers: [...state.layers].map((l, i) => i === layerIndex ? { ...l, dim: [l.dim[0] >= 8 ? l.dim[0] * 2 : l.dim[0] + 1, l.dim[1]] } : l) })
     }
     const subNeuron = layerIndex => {
-        setState({ ...state, layers: [...state.layers].map((l, i) => i === layerIndex ? { ...l, dim: [l.dim[0] - 1, l.dim[1]] } : l) })
+        setState({ ...state, layers: [...state.layers].map((l, i) => i === layerIndex ? { ...l, dim: [l.dim[0] > 8 ? l.dim[0] / 2 : l.dim[0] - 1, l.dim[1]] } : l) })
     }
     const addLayer = () => {
         const layers = [...state.layers];

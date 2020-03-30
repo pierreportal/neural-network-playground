@@ -44,7 +44,7 @@ export default function Layer(props) {
                 <div className='layer-nodes'>
                     {displayedNodes}
 
-                    <div className='layer-activation' onBlur={changeActivation} contentEditable={props.constructor.type === 'hiden'}>{activation}</div>
+                    <div className='layer-activation' onBlur={changeActivation} contentEditable={props.constructor.type !== 'output'}>{activation}</div>
                 </div>
 
 
