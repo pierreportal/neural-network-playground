@@ -9,6 +9,8 @@ export default function Layer(props) {
         width: `${100 / networkWidth}%`,
         backgroundColor: color
     }
+
+
     const addNeuron = () => props.addNeuron(index)
 
     const subNeuron = () => {
@@ -46,8 +48,6 @@ export default function Layer(props) {
 
                     <div className='layer-activation' onBlur={changeActivation} contentEditable={props.constructor.type !== 'output'}>{activation}</div>
                 </div>
-
-
 
                 <div className='layer-buttons'>
                     {props.constructor.type === 'hiden' && addSubNeurons}

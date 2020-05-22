@@ -12,7 +12,7 @@ export default function NetworkDesigner(props) {
         optimizer: 'rmsprop',
         learningRate: '1e-3',
         lossFunction: 'binary-crossentropy',
-        batch_size: 164,
+        batch_size: 128,
         layers: [
             inputLayer,
             outpuLayer

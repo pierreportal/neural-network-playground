@@ -71,7 +71,7 @@ export default function DataDrawer(props) {
                 {dataPoints}
             </div>
             <div className="color-palete">
-                <input type="range" max={80} min={20} onChange={changeSpread} />{state.spreading}
+                <input type="range" max={80} min={20} onChange={changeSpread} />
                 {colorPads}
             </div>
         </div>
