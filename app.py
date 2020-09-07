@@ -16,7 +16,7 @@ def model():
 
         return str(summary_object)
     else:
-        return 'hello'
+        return True
 
 
 if __name__ == "__main__":
